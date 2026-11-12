@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>
+      実装ガイド｜ホームページ提案プレビュー（株式会社プレジャーデサイン様向け）
+    </title>
+    <style>
+      :root {
+        --deep: #10718e;
+        --teal: #34929a;
+        --mint: #86e2c7;
+        --soft: #eef3f1;
+        --line: #d3e2df;
+        --ink: #1a1a1a;
+        --muted: #4a6163;
+        --orange: #c95000;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: #fff;
+        font-family:
+          "Yu Gothic", "Hiragino Kaku Gothic ProN", "Meiryo", system-ui,
+          sans-serif;
+        font-size: 17px;
+        line-height: 1.9;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--deep);
+        text-underline-offset: 0.25em;
+      }
+      .wrap {
+        width: min(960px, calc(100% - 40px));
+        margin-inline: auto;
+      }
+      header {
+        background: linear-gradient(110deg, #f5fbf8, #ddf1eb);
+        border-bottom: 1px solid var(--line);
+        padding: 44px 0 36px;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        color: var(--deep);
+        border: 1px solid var(--deep);
+        border-radius: 3px;
+        padding: 2px 10px;
+      }
+      h1 {
+        font-size: clamp(28px, 4.4vw, 38px);
+        line-height: 1.5;
+        margin: 16px 0 12px;
+      }
+      h2 {
+        font-size: clamp(24px, 3.2vw, 28px);
+        line-height: 1.5;
+        margin: 0 0 18px;
+        padding-left: 14px;
+        border-left: 5px solid var(--deep);
+      }
+      h3 {
+        font-size: 19px;
+        margin: 26px 0 8px;
+        color: var(--deep);
+      }
+      p {
+        margin: 0 0 14px;
+      }
+      section {
+        padding: 44px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .lead {
+        color: var(--muted);
+      }
+      .links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        min-height: 52px;
+        padding: 10px 22px;
+        border-radius: 7px;
+        font-weight: 700;
+        text-decoration: none;
+        color: #fff;
+        background: var(--orange);
+        box-shadow: 0 4px 0 #a54200;
+      }
+      .btn.sub {
+        background: #fff;
+        color: var(--deep);
+        border: 2px solid var(--deep);
+        box-shadow: none;
+      }
+      .steps {
+        counter-reset: s;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .steps li {
+        counter-increment: s;
+        position: relative;
+        padding: 4px 0 14px 54px;
+      }
+      .steps li::before {
+        content: counter(s);
+        position: absolute;
+        left: 0;
+        top: 2px;
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--deep);
+        color: #fff;
+        font-weight: 700;
+      }
+      .table-scroll {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 16px;
+        line-height: 1.75;
+        min-width: 560px;
+      }
+      th,
+      td {
+        text-align: left;
+        vertical-align: top;
+        padding: 13px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      thead th {
+        background: var(--soft);
+        color: var(--deep);
+        font-size: 15px;
+        white-space: nowrap;
+      }
+      td:first-child {
+        white-space: nowrap;
+        font-weight: 700;
+      }
+      code {
+        font-family: Consolas, "SFMono-Regular", Menlo, monospace;
+        font-size: 0.9em;
+        background: var(--soft);
+        padding: 1px 6px;
+        border-radius: 3px;
+        overflow-wrap: anywhere;
+      }
+      .must {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+        background: #aa2938;
+        border-radius: 3px;
+        padding: 0 8px;
+        margin-right: 6px;
+        white-space: nowrap;
+      }
+      .opt {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--deep);
+        background: #e6f3ef;
+        border-radius: 3px;
+        padding: 0 8px;
+        margin-right: 6px;
+        white-space: nowrap;
+      }
+      .codebox {
+        position: relative;
+        margin: 12px 0 18px;
+      }
+      pre {
+        margin: 0;
+        padding: 18px 18px 18px;
+        background: #0f2f38;
+        color: #e9f6f3;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: Consolas, "SFMono-Regular", Menlo, monospace;
+        font-size: 14.5px;
+        line-height: 1.75;
+      }
+      .copy {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        min-height: 36px;
+        padding: 4px 14px;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        color: #0f2f38;
+        background: var(--mint);
+        border: 0;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .swatches {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+        margin: 12px 0 6px;
+      }
+      .sw {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        overflow: hidden;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .sw i {
+        display: block;
+        height: 54px;
+      }
+      .sw span {
+        display: block;
+        padding: 8px 10px;
+      }
+      .sw b {
+        display: block;
+        font-family: Consolas, Menlo, monospace;
+      }
+      .note {
+        background: var(--soft);
+        border-left: 4px solid var(--teal);
+        padding: 16px 18px;
+        border-radius: 0 6px 6px 0;
+      }
+      .note p:last-child {
+        margin-bottom: 0;
+      }
+      ul.plain {
+        margin: 0 0 14px;
+        padding-left: 1.3em;
+      }
+      ul.plain li {
+        margin-bottom: 6px;
+      }
+      footer {
+        padding: 30px 0 50px;
+        color: var(--muted);
+        font-size: 15px;
+      }
+      @media (max-width: 640px) {
+        body {
+          font-size: 17px;
+        }
+        section {
+          padding: 34px 0;
+        }
+        .steps li {
+          padding-left: 50px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <span class="tag">IMPLEMENTATION GUIDE</span>
+        <h1>ホームページ提案プレビュー<br />実装ガイド</h1>
+        <p class="lead">
+          株式会社プレジャーデサイン様のホームページ
+          リニューアル案を、そのまま実装に使っていただくための手引きです。作成：株式会社コミクス（2026年11月12日）
+        </p>
+        <div class="links">
+          <a class="btn" href="./">プレビューを開く</a>
+          <a
+            class="btn sub"
+            href="https://github.com/suzuki-commits/pled-renewal-preview/archive/refs/heads/main.zip"
+            >素材一式（ZIP）をダウンロード</a
+          >
+          <a
+            class="btn sub"
+            href="https://github.com/suzuki-commits/pled-renewal-preview"
+            >ファイルを1つずつ見る</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section>
+        <h2>最短の進め方</h2>
+        <ol class="steps">
+          <li>
+            ZIP をダウンロードして展開し、<code>index.html</code>
+            をブラウザーで開く（サーバー不要・そのまま表示できます）。
+          </li>
+          <li>
+            下の「公開前に必ず直す箇所」を上から順に対応する（プレビュー用の表示とダミーのフォームを本番用に差し替える）。
+          </li>
+          <li>
+            現行サイトの各ページへのリンクをつなぎ、表示を確認して公開する。
+          </li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>素材の中身</h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>ファイル</th>
+                <th>サイズ</th>
+                <th>内容</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>index.html</code></td>
+                <td>20.5 KB</td>
+                <td>
+                  ページ本体（1ページ構成）。ヒーローの図とアイコンはすべてインライン
+                  SVG で、画像ファイルはロゴだけです。
+                </td>
+              </tr>
+              <tr>
+                <td><code>styles.css</code></td>
+                <td>26.8 KB</td>
+                <td>
+                  全スタイル。色は冒頭の <code>:root</code> にまとめてあります。
+                </td>
+              </tr>
+              <tr>
+                <td><code>app.js</code></td>
+                <td>4.5 KB</td>
+                <td>
+                  スマホ用メニューの開閉、ページ内リンク、フォームの入力チェック（送信はしないダミー動作）。
+                </td>
+              </tr>
+              <tr>
+                <td><code>assets/logo.png</code></td>
+                <td>5.3 KB</td>
+                <td>
+                  現行サイトのロゴ（<code>/images/logo01.png</code>・250×56px）を加工せずそのまま使用。
+                </td>
+              </tr>
+              <tr>
+                <td><code>handoff.html</code></td>
+                <td>—</td>
+                <td>このガイド。公開時は不要です。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>前提</h3>
+        <ul class="plain">
+          <li>
+            外部の読み込みはゼロです（CDN・Web
+            フォント・計測タグ・ライブラリなし）。ビルド作業もありません。
+          </li>
+          <li>
+            フォントは端末の標準フォント（游ゴシック／ヒラギノ／メイリオ）です。
+          </li>
+          <li>画面幅の切り替えは 1180px・960px・740px・359px の4段階です。</li>
+          <li>
+            掲載した文章と会社概要は、2026年11月12日時点の現行サイト（トップと会社概要ページ）の記載だけを使っています。実績の数字やお客様の声など、現行サイトで確認できなかった内容は入れていません。
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>公開前に必ず直す箇所</h2>
+        <p>
+          プレビューは「公式サイトではない」ことを示す表示と、送信しないフォームで作ってあります。行番号は
+          ZIP 内のファイルのものです。
+        </p>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>場所</th>
+                <th>いまの状態</th>
+                <th>対応</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>index.html</code> 6行目</td>
+                <td>
+                  <span class="must">必須</span
+                  >検索エンジンに載せない設定（<code>noindex,nofollow</code>）
+                </td>
+                <td>この1行を削除する。</td>
+              </tr>
+              <tr>
+                <td><code>index.html</code> 7・9行目</td>
+                <td>
+                  <span class="must">必須</span
+                  >説明文とタイトルが「提案用プレビュー」の文言
+                </td>
+                <td>本番のタイトルと説明文に書き換える。</td>
+              </tr>
+              <tr>
+                <td><code>index.html</code> 15行目</td>
+                <td>
+                  <span class="must">必須</span
+                  >最上部の帯「本サイトは提案用プレビューです」
+                </td>
+                <td>
+                  <code>&lt;div class="preview-notice"&gt;</code>
+                  を1行ごと削除する。
+                </td>
+              </tr>
+              <tr>
+                <td><code>index.html</code> 156行目</td>
+                <td>
+                  <span class="must">必須</span
+                  >フッター右下の「本サイトは提案用プレビューです」
+                </td>
+                <td>
+                  <code>footer-bottom</code> 内の
+                  <code>&lt;p&gt;</code> を削除する。
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <code>index.html</code> 136〜149行目<br /><code>app.js</code>
+                  101〜119行目
+                </td>
+                <td>
+                  <span class="must">必須</span
+                  >お問い合わせフォームがダミー。入力チェックだけ行い、どこにも送信しません。
+                </td>
+                <td>
+                  下の「お問い合わせフォームのつなぎ方」のどちらかで対応する。
+                </td>
+              </tr>
+              <tr>
+                <td><code>index.html</code> 129〜133行目</td>
+                <td>
+                  <span class="must">必須</span
+                  >「支援実績」「お知らせ」「採用情報」が、掲載していない旨の案内だけ
+                </td>
+                <td>
+                  現行サイトの各ページへのリンクに置き換えるか、内容を入れる。
+                </td>
+              </tr>
+              <tr>
+                <td><code>index.html</code> 153行目</td>
+                <td>
+                  <span class="must">必須</span>プライバシーポリシーが仮の文章
+                </td>
+                <td>
+                  現行の
+                  <code>/privacy-policy/</code>
+                  へのリンクに置き換える（144行目とフッターのリンクも同じ）。
+                </td>
+              </tr>
+              <tr>
+                <td><code>index.html</code> 19〜27行目</td>
+                <td>
+                  <span class="opt">確認</span
+                  >ナビゲーションがすべてページ内リンク（<code>#concept</code>
+                  など）
+                </td>
+                <td>下層ページを残す場合は、現行の各ページの URL に変える。</td>
+              </tr>
+              <tr>
+                <td><code>index.html</code> 115〜125行目</td>
+                <td>
+                  <span class="opt">確認</span>会社概要は
+                  2026年11月12日時点の転記
+                </td>
+                <td>役員・所在地・メンバー数が最新かを確認する。</td>
+              </tr>
+              <tr>
+                <td>全体</td>
+                <td>
+                  <span class="opt">確認</span
+                  >アクセス解析のタグは入っていません
+                </td>
+                <td>現行サイトで使っている計測タグを追加する。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>お問い合わせフォームのつなぎ方</h2>
+        <h3>方法A：現行のお問い合わせページへ送る（いちばん早い）</h3>
+        <p>
+          フォーム部分（<code>index.html</code> 137〜150行目の
+          <code>&lt;div class="form-panel"&gt;</code>）を、現行の
+          <code>/contact/</code>
+          へ進むボタンに置き換えます。ヘッダーや各事業カードのボタン（<code>href="#contact"</code>）はそのまま使えます。
+        </p>
+        <div class="codebox">
+          <button class="copy" type="button">コピー</button>
+          <pre>
+&lt;div class="form-panel"&gt;
+  &lt;a class="button button-large" href="/contact/" data-cta="contact"&gt;
+    お問い合わせフォームへ&lt;span class="arrow" aria-hidden="true"&gt;↗&lt;/span&gt;
+  &lt;/a&gt;
+&lt;/div&gt;</pre>
+        </div>
+        <p>
+          このとき <code>app.js</code> の
+          68〜122行目（フォーム用の処理）は不要になるので削除します。残すと、フォームが見つからないというエラーがブラウザーのコンソールに出ます。あわせて
+          <code>index.html</code>
+          136行目の「プレビュー用フォーム」の注記（<code
+            >&lt;div class="contact-demo-note"&gt;</code
+          >）も削除してください。
+        </p>
+
+        <h3>方法B：このページのフォームをそのまま使う</h3>
+        <ul class="plain">
+          <li>
+            <code>index.html</code> 138行目：<code>action="#contact"</code>
+            を実際の送信先に変え、<code>method="post"</code> と各入力欄の
+            <code>name</code> 属性を足す（プレビューでは
+            <code>name</code> を付けていません）。
+          </li>
+          <li>
+            <code>index.html</code>
+            136・139・146行目：「プレビュー用フォーム」「外部へ送信・保存されません」「デモ動作のみ」の文言を削除する。
+          </li>
+          <li>
+            <code>index.html</code> 140〜143行目：<code
+              >autocomplete="off"</code
+            >
+            を
+            <code>name</code
+            >・<code>organization</code>・<code>email</code>・<code>tel</code>
+            に変える（入力の手間が減ります）。
+          </li>
+          <li>
+            <code>index.html</code>
+            145行目：ボタンの文言「入力内容を確認する」を「送信する」などに変える。
+          </li>
+          <li>
+            <code>app.js</code> 102行目：<code>event.preventDefault();</code>
+            が送信を止めています。入力に不備があるときだけ止めるように変え、116〜118行目の「送信されていません」の表示を外す。
+          </li>
+          <li>
+            迷惑送信の対策（reCAPTCHA など）と、送信後の完了ページを用意する。
+          </li>
+        </ul>
+        <div class="note">
+          <p>
+            事業カードの「この事業について相談する」を押すと、お問い合わせ内容の欄に事業名が自動で入ります（<code
+              >app.js</code
+            >
+            74〜90行目）。方法Bではそのまま使えます。
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2>色とボタン</h2>
+        <p>
+          青緑の5色と背景色は、現行サイトのテーマ CSS
+          で使われている値をそのまま引き継いでいます。オレンジだけが今回追加した色です。
+        </p>
+        <div class="swatches">
+          <div class="sw">
+            <i style="background: #10718e"></i
+            ><span><b>#10718E</b>見出し・フッター</span>
+          </div>
+          <div class="sw">
+            <i style="background: #34929a"></i
+            ><span><b>#34929A</b>線・アイコン</span>
+          </div>
+          <div class="sw">
+            <i style="background: #39a3a0"></i
+            ><span><b>#39A3A0</b>図の中間色</span>
+          </div>
+          <div class="sw">
+            <i style="background: #3eb5bb"></i
+            ><span><b>#3EB5BB</b>リストの点</span>
+          </div>
+          <div class="sw">
+            <i style="background: #86e2c7"></i
+            ><span><b>#86E2C7</b>アクセント</span>
+          </div>
+          <div class="sw">
+            <i style="background: #ddedee"></i
+            ><span><b>#DDEDEE</b>お問い合わせ背景</span>
+          </div>
+          <div class="sw">
+            <i style="background: #eef3f1"></i
+            ><span><b>#eef3f1</b>サービス背景</span>
+          </div>
+          <div class="sw">
+            <i style="background: #c95000"></i
+            ><span><b>#c95000</b>ボタン面（新規）</span>
+          </div>
+          <div class="sw">
+            <i style="background: #ff7a00"></i
+            ><span><b>#FF7A00</b>ボタン上端（新規）</span>
+          </div>
+        </div>
+        <h3>立体感のあるオレンジのボタン</h3>
+        <p>
+          ボタンだけを現行サイトへ先に取り入れる場合は、この3行で再現できます（<code
+            >styles.css</code
+          >
+          60〜62行目）。下側の濃い影で厚みを出し、押すと沈みます。
+        </p>
+        <div class="codebox">
+          <button class="copy" type="button">コピー</button>
+          <pre>
+.button { display: inline-flex; min-height: 56px; justify-content: center; align-items: center; gap: 32px; padding: 14px 26px; color: #fff; background: linear-gradient(180deg, #FF7A00 0, #E85E00 3px, #c95000 3px, #bd4d00 100%); border: 0; border-radius: 7px; box-shadow: 0 4px 0 #a54200, 0 9px 18px rgb(90 45 10 / 12%); font-size: 16px; font-weight: 700; line-height: 1.5; text-shadow: 0 1px 1px rgb(100 35 0 / 15%); transition: transform .2s, box-shadow .2s; }
+.button:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #bd4d00, 0 12px 22px rgb(90 45 10 / 16%); }
+.button:active { transform: translateY(3px); box-shadow: 0 1px 0 #bd4d00, 0 4px 9px rgb(90 45 10 / 12%); }</pre>
+        </div>
+        <p>
+          各ボタンには
+          <code>data-cta</code
+          >（<code>header</code>／<code>hero</code>／<code>services</code>／<code>form-preview</code>）を付けてあります。計測タグを入れたあと、どのボタンが押されたかを見分けるのに使えます。
+        </p>
+      </section>
+
+      <section>
+        <h2>WordPress に組み込む場合</h2>
+        <p>
+          現行サイトは WordPress（テーマ名
+          <code>pleasuredesign</code
+          >）とお見受けしました。組み込む際の目安です。
+        </p>
+        <ul class="plain">
+          <li>
+            <code>index.html</code> の <code>&lt;header&gt;</code> と
+            <code>&lt;footer&gt;</code> をテーマの
+            <code>header.php</code>／<code>footer.php</code> へ、<code
+              >&lt;main&gt;</code
+            >
+            の中身をトップページ用のテンプレートへ移します。
+          </li>
+          <li>
+            <code>styles.css</code> は
+            <code>.button</code
+            >・<code>.container</code>・<code>.hero</code>・<code>.field</code>
+            など一般的なクラス名を使っています。現行テーマの CSS
+            と同時に読み込むと干渉する可能性があるので、トップページだけで読み込むか、クラス名に接頭辞を付けてください。
+          </li>
+          <li>
+            <code>app.js</code> は <code>&lt;head&gt;</code> で
+            <code>defer</code>
+            付きで読み込んでいます。フッターで読み込む形に変えても動きます。
+          </li>
+          <li>
+            ロゴの参照先 <code>assets/logo.png</code> は、現行の
+            <code>/images/logo01.png</code> に変えれば画像の追加は不要です。
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>確認できていること・できていないこと</h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>項目</th>
+                <th>状況</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>表示の崩れ</td>
+                <td>
+                  Chrome で画面幅 320／390／900／1440px
+                  を確認し、横スクロールは出ていません。
+                </td>
+              </tr>
+              <tr>
+                <td>動作</td>
+                <td>
+                  スマホ用メニュー、ページ内リンク、フォームの入力チェックを
+                  Chrome で確認しています。
+                </td>
+              </tr>
+              <tr>
+                <td>Safari・Firefox・実機</td>
+                <td>未確認です。公開前にご確認ください。</td>
+              </tr>
+              <tr>
+                <td>お問い合わせ数への効果</td>
+                <td>
+                  未測定です。公開後に、お問い合わせの完了数を現行ページと比べて確かめる必要があります。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <p>
+          このページとプレビューは検索エンジンに表示されない設定ですが、GitHub
+          の公開リポジトリに置いているため、URL
+          を知らない方でも閲覧・取得できる状態です。取り下げをご希望の場合は鈴木までご連絡ください。
+        </p>
+        <p>株式会社コミクス 鈴木 章裕</p>
+      </div>
+    </footer>
+
+    <script>
+      document.querySelectorAll(".copy").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var text = b.parentElement.querySelector("pre").textContent;
+          var done = function () {
+            b.textContent = "コピーしました";
+            setTimeout(function () {
+              b.textContent = "コピー";
+            }, 1600);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, function () {
+              b.textContent = "選択してコピーしてください";
+            });
+          } else {
+            var r = document.createRange();
+            r.selectNodeContents(b.parentElement.querySelector("pre"));
+            var s = getSelection();
+            s.removeAllRanges();
+            s.addRange(r);
+            try {
+              document.execCommand("copy");
+              done();
+            } catch (e) {
+              b.textContent = "選択してコピーしてください";
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
