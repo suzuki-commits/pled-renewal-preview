@@ -160,6 +160,12 @@
         white-space: nowrap;
         font-weight: 700;
       }
+      .nb {
+        display: inline-block;
+      }
+      .nw {
+        white-space: nowrap;
+      }
       code {
         font-family: Consolas, "SFMono-Regular", Menlo, monospace;
         font-size: 0.9em;
@@ -196,7 +202,7 @@
       }
       pre {
         margin: 0;
-        padding: 18px 18px 18px;
+        padding: 56px 18px 18px;
         background: #0f2f38;
         color: #e9f6f3;
         border-radius: 8px;
@@ -283,7 +289,10 @@
     <header>
       <div class="wrap">
         <span class="tag">IMPLEMENTATION GUIDE</span>
-        <h1>ホームページ提案プレビュー<br />実装ガイド</h1>
+        <h1>
+          <span class="nb">ホームページ</span
+          ><span class="nb">提案プレビュー</span><br />実装ガイド
+        </h1>
         <p class="lead">
           株式会社プレジャーデサイン様のホームページ
           リニューアル案を、そのまま実装に使っていただくための手引きです。作成：株式会社コミクス（2026年11月12日）
@@ -335,7 +344,7 @@
             <tbody>
               <tr>
                 <td><code>index.html</code></td>
-                <td>20.5 KB</td>
+                <td class="nw">20.5 KB</td>
                 <td>
                   ページ本体（1ページ構成）。ヒーローの図とアイコンはすべてインライン
                   SVG で、画像ファイルはロゴだけです。
@@ -343,21 +352,21 @@
               </tr>
               <tr>
                 <td><code>styles.css</code></td>
-                <td>26.8 KB</td>
+                <td class="nw">26.8 KB</td>
                 <td>
                   全スタイル。色は冒頭の <code>:root</code> にまとめてあります。
                 </td>
               </tr>
               <tr>
                 <td><code>app.js</code></td>
-                <td>4.5 KB</td>
+                <td class="nw">4.5 KB</td>
                 <td>
                   スマホ用メニューの開閉、ページ内リンク、フォームの入力チェック（送信はしないダミー動作）。
                 </td>
               </tr>
               <tr>
                 <td><code>assets/logo.png</code></td>
-                <td>5.3 KB</td>
+                <td class="nw">5.3 KB</td>
                 <td>
                   現行サイトのロゴ（<code>/images/logo01.png</code>・250×56px）を加工せずそのまま使用。
                 </td>
